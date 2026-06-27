@@ -1,6 +1,0 @@
-name: roboeyes
-version: 1.0.0
-files:
-  - roboeyes.h
-  - roboeyes.cpp
-

@@ -2,49 +2,34 @@
 
 Roboeyes implementation for ESPHome — animated eyes for OLED/TFT displays.
 
-## Component structure
+## Installation (local, no internet required at compile time)
 
-```
-components/roboeyes/
-├── __init__.py      ← ESPHome Python schema + code generation
-├── roboeyes.h       ← C++ class definition
-├── roboeyes.cpp     ← C++ implementation
-└── component.yaml   ← metadata (name, version)
-```
+Clone or copy this repo directly into your ESPHome config's `components/` folder,
+named `roboeyes`:
 
-## Usage
+```bash
+# Option A: git clone into the right place
+git clone https://github.com/SparkMike77/esphome-roboeyes \
+    ~/esphome/components/roboeyes
 
-### Option 1: GitHub external component
-
-```yaml
-external_components:
-  - source: github://SparkMike77/esphome-roboeyes
-    components: [roboeyes]
+# Option B: copy the folder
+cp -r esphome-roboeyes/ ~/esphome/components/roboeyes/
 ```
 
-### Option 2: Copy locally
-
-Copy the `components/` folder from this repo next to your ESPHome YAML:
+Result:
 
 ```
 esphome/
-├── roboeyes-test.yaml
-└── my_components/
-    └── roboeyes/
+├── your-device.yaml
+└── components/
+    └── roboeyes/        ← this repo
         ├── __init__.py
         ├── roboeyes.h
         └── roboeyes.cpp
 ```
 
-Then reference it in your YAML:
-
-```yaml
-external_components:
-  - source:
-      type: local
-      path: my_components
-    components: [roboeyes]
-```
+ESPHome automatically discovers components in `config/components/` — no
+`external_components:` block needed in your YAML.
 
 ## Configuration
 
@@ -54,18 +39,17 @@ display:
     model: "SSD1306 128x64"
     id: my_display
     address: 0x3C
-    # draw lambda calls roboeyes.draw() each frame
 
 roboeyes:
   display_id: my_display
 ```
 
+Call `id(roboeyes_id).draw()` inside your display lambda to render each frame.
+
 ## API
 
-Call these from lambdas or automations:
-
-- `id(roboeyes_id).blink_once()` — trigger a single blink
-- `id(roboeyes_id).open_eye()` — force eye open
-- `id(roboeyes_id).move_pupil(x, y)` — move pupil to pixel position
-- `id(roboeyes_id).set_pupil_radius(r)` — set pupil size
-- `id(roboeyes_id).draw()` — call inside a display lambda to render
+- `blink_once()` — trigger a single blink
+- `open_eye()` — force eye open
+- `move_pupil(x, y)` — move pupil to pixel position
+- `set_pupil_radius(r)` — set pupil size in pixels
+- `draw()` — render to the display (call from display lambda)
